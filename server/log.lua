@@ -1,12 +1,14 @@
 local log = {}
 
 -- supported log levels
+LOG_DEBUG = 0
 LOG_INFO = 1
 LOG_WARN = 2
 LOG_ERROR = 3
 
 -- log level strings
 local LOG_STR = {}
+LOG_STR[LOG_DEBUG] = "DEBUG"
 LOG_STR[LOG_INFO] = "INFO"
 LOG_STR[LOG_WARN] = "WARN"
 LOG_STR[LOG_ERROR] = "ERROR"
@@ -23,8 +25,13 @@ function log:log(level, ...)
 end
 
 
+function log:debug(...)
+    if LOG_LEVEL == LOG_DEBUG then self:log(LOG_DEBUG, ...) end
+end
+
+
 function log:info(...)
-    if LOG_LEVEL == LOG_INFO then self:log(LOG_INFO, ...) end
+    if LOG_LEVEL > LOG_DEBUG then self:log(LOG_INFO, ...) end
 end
 
 

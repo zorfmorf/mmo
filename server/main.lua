@@ -4,12 +4,18 @@ Class = require "lib.hump.class"
 -- lua sockets mainly for millisecond precision and sleep methods
 socket = require "socket"
 
+-- enet TODO fix path? for linux?
+local enet = require "enet"
+
 -- own log handler
 log = require "log"
 
 -- configuration
 require "defaultconfig"
 require "config"
+
+-- enet wrapper for network handling
+network = require "network"
 
 -- event handling
 events = require "events"
@@ -20,20 +26,17 @@ require "GameInstance"
 -- create and run the individual (re)actors
 local r = GameInstance(DEFAULT_SERVER_NAME, DEFAULT_GAME_PORT)
 
+-- Initialize stuff
+network:init(DEFAULT_GAME_PORT)
+events:init()
+
 -- create an initial timer event to kick off everything
-events.create_timer_event()
+events:create_timer_event()
 
-
--- placeholder method "read from client" until we actually implement that somewhere
-function read_inputs()
-    return nil
-end
-
-
--- handle event queue react to events
+-- handle event queue and react to events
 while(true) do
-    local ev = events.wait_for_event()
+    local ev = events:wait_for_event()
     ev.run()
-    ev.inputs = read_inputs()
+    ev.inputs = network:read_inputs()
     r:react(ev)
 end

@@ -29,7 +29,7 @@ end
 
 -- Create a new event for the next run
 function GameInstance:post_timer_event(event)
-    events.create_timer_event(event.time + NETWORK_TICK_RATE)
+    events:create_timer_event(event.time + NETWORK_TICK_RATE)
 end
 
 
