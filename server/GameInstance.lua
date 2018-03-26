@@ -28,18 +28,18 @@ end
 
 
 -- Create a new event for the next run
-function GameInstance:post_timer_event(time_left)
-    
+function GameInstance:post_timer_event(event)
+    events.create_timer_event(event.time + NETWORK_TICK_RATE)
 end
 
 
 -- (re)actor method
 function GameInstance:react(event)
-    assert event.type == EVENT_TIMER
+    assert(event and (event.typ == EVENT_TIMER), "No valid event passed")
     self:process_inputs(event.inputs)
     self:update()
     self:post_updates_to_clients()
     
     -- create an event for the next round of updates
-    self:post_timer_event(time_left_until_end_of_network_tick)
+    self:post_timer_event(event)
 end
