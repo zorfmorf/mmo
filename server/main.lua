@@ -4,6 +4,9 @@ Class = require "lib.hump.class"
 -- lua sockets mainly for millisecond precision and sleep methods
 socket = require "socket"
 
+-- own log handler
+log = require "log"
+
 -- configuration
 require "defaultconfig"
 require "config"
@@ -27,7 +30,7 @@ function read_inputs()
 end
 
 
--- 
+-- handle event queue react to events
 while(true) do
     local ev = events.wait_for_event()
     ev.run()

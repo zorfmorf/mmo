@@ -9,3 +9,6 @@ DEFAULT_GAME_PORT = 25896
 
 -- time between server updates in seconds
 NETWORK_TICK_RATE = 0.1
+
+-- logs levels
+LOG_LEVEL = LOG_INFO
