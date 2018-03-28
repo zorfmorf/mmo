@@ -32,7 +32,7 @@ function events:create_timer_event(time)
     end
     
     -- finally create a new event and add it to queue
-    table.insert(self.queue, { run = function() log:info("Running event ", tostring(time)) end, time = time, typ = EVENT_TIMER })
+    table.insert(self.queue, { run = function() log:debug("Running event ", tostring(time)) end, time = time, typ = EVENT_TIMER })
 end
 
 return events

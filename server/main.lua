@@ -27,7 +27,7 @@ require "GameInstance"
 local r = GameInstance(DEFAULT_SERVER_NAME, DEFAULT_GAME_PORT)
 
 -- Initialize stuff
-network:init(DEFAULT_GAME_PORT)
+network:init("localhost", DEFAULT_GAME_PORT)
 events:init()
 
 -- create an initial timer event to kick off everything

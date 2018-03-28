@@ -1,0 +1,22 @@
+#,16x16,tiles,Swamp Tiles
+0,0,grass_1
+1,0,grass_2
+2,0,grass_3
+3,0,grass_edge_1
+4,0,grass_edge_2
+5,0,grass_edge_3
+6,0,grass_edge_4
+7,0,swamp_1
+8,0,swamp_2
+9,0,swamp_3
+10,0,swamp_4
+11,0,swamp_5
+12,0,swamp_6
+13,0,swamp_7
+14,0,swamp_8
+15,0,swamp_9
+16,0,swamp_10
+17,0,swamp_11
+18,0,swamp_12
+19,0,swamp_13
+20,0,swamp_14

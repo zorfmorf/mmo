@@ -1,8 +1,9 @@
 
 local network = {}
 
-function network:init(port)
-    self.host = enet.host_create("localhost:" .. port)
+function network:init(location, port)
+    self.host = enet.host_create(location .. ":" .. port)
+    log:info("Bound server to", location, ":", port)
 end
 
 
@@ -11,7 +12,7 @@ function network:read_inputs()
     local event = self.host:service(100)
     while event do
         if event.type == "receive" then
-            log:info("Got message: ", event.data, event.peer)
+            log:info("Got message", event.data, event.peer)
             event.peer:send( "pong" )
         elseif event.type == "connect" then
             log:info(event.peer, "connected.")

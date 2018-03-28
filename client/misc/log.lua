@@ -15,7 +15,7 @@ LOG_STR[LOG_ERROR] = "ERROR"
 
 
 -- set default log level
-LOG_LEVEL = LOG_ERROR
+LOG_LEVEL = LOG_DEBUG
 
 
 -- log with level
