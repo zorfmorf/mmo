@@ -44,13 +44,16 @@ end
 
 
 function love.draw()
-    love.graphics.scale( 3, 3 )
     local chunk = world:get(0, 0)
     for i=1,WORLD_CHUNK_SIZE do
         for j=1,WORLD_CHUNK_SIZE do
             local quad = chunk[i - 1][j - 1]
             if quad then
-                love.graphics.draw(texHandler.tex.atlas[quad[1]].tex, quad[2], 0 + (i - 1) * WORLD_CHUNK_SIZE, 0 + (j - 1) * WORLD_CHUNK_SIZE)
+                local atlas = texHandler.tex.atlas[quad[1]]
+                local x = math.floor(0 + (i - 1) * atlas.x)
+                local y = math.floor(0 + (j - 1) * atlas.y)
+                --print( x, y)
+                love.graphics.draw(atlas.tex, quad[2], x, y)
             end
         end
     end

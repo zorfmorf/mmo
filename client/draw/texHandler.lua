@@ -34,6 +34,7 @@ function texHandler:loadTexture(name)
                     atlas.type = v[3]
                     atlas.name = v[4]
                     atlas.tex = love.graphics.newImage(name .. ".png")
+                    if name == "res/tileset" then local data = self:importTexture(name .. ".png") end
                     self.tex.atlas[atlas.name] = atlas
                 else
                     log:err("Invalid descriptor header", name, v)
@@ -44,7 +45,7 @@ function texHandler:loadTexture(name)
                     local x = v[1]
                     local y = v[2]
                     local name = v[3]
-                    local quad = love.graphics.newQuad( x * atlas.x, y * atlas.y, atlas.x, atlas.y, atlas.tex:getWidth(), atlas.tex:getHeight())
+                    local quad = love.graphics.newQuad( x * atlas.x, y * atlas.y, atlas.x, atlas.y, atlas.tex:getDimensions())
                     table.insert(self.tex[atlas.type], { atlas.name, quad})
                 else
                     log:err("Invalid descriptor content", name, tostring(v))
@@ -54,6 +55,24 @@ function texHandler:loadTexture(name)
     else
         log:err("Can't find texture or descriptor file with name", name)
     end
+end
+
+
+function texHandler:importTexture(path)
+    local data = love.image.newImageData(path)
+    local xw = data:getWidth() * TEXTURE_SCALING
+    local yw = data:getHeight() * TEXTURE_SCALING
+    local result = love.image.newImageData(xw, yw)
+    for i=1,xw do
+        for j=1,yw do
+            local x = math.floor((i - 1) / TEXTURE_SCALING)
+            local y = math.floor((j - 1) / TEXTURE_SCALING)
+            local r, g, b, a = data:getPixel(x, y)
+            result:setPixel(i - 1, j - 1, r, g, b, a)
+            print ("finished pixel", i, j)
+        end
+    end
+    return result
 end
 
 
