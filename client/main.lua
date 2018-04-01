@@ -8,6 +8,7 @@ require "misc.util"
 log = require "misc.log"
 texHandler = require "draw.texHandler"
 camera = require "draw.camera"
+drawHandler = require "draw.drawHandler"
 require "world.world"
 
 -- vars
@@ -47,24 +48,13 @@ end
 
 
 function love.draw()
-    love.graphics.scale(TEXTURE_SCALING, TEXTURE_SCALING)
-    camera:apply()
-    
-    love.graphics.setColor(255, 255, 255)
-    local chunk = world:get(0, 0)
-    for i=1,WORLD_CHUNK_SIZE do
-        for j=1,WORLD_CHUNK_SIZE do
-            local quad = chunk[i - 1][j - 1]
-            if quad then
-                local atlas = texHandler.tex.atlas[quad.atlas]
-                local x = math.floor(0 + (i - 1) * atlas.x)
-                local y = math.floor(0 + (j - 1) * atlas.y)
-                love.graphics.draw(atlas.tex, quad.quad, x, y)
-            end
-        end
-    end
-    
-    love.graphics.origin()
-    love.graphics.setColor(200, 100, 100)
-    love.graphics.circle("fill", love.graphics.getWidth() / 2, love.graphics.getHeight() / 2, 10)
+    drawHandler:draw(world)
+end
+
+
+function love.keypressed(key)
+    if key == "left" then camera:left() end
+    if key == "up" then camera:up() end
+    if key == "down" then camera:down() end
+    if key == "right" then camera:right() end
 end
