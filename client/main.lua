@@ -10,6 +10,7 @@ texHandler = require "draw.texHandler"
 camera = require "draw.camera"
 drawHandler = require "draw.drawHandler"
 require "world.world"
+require "world.sprite"
 
 -- vars
 local host = nil
@@ -27,6 +28,11 @@ function love.load()
     camera:focus(5, 5)
     texHandler:init()
     world = World()
+    
+    if EDITOR_MODE then
+        editor = require "editor.editor"
+        editor:init()
+    end
 end
 
 
@@ -44,6 +50,8 @@ function love.update(dt)
         end
         event = host:service()
     end
+    
+    if EDITOR_MODE then editor:update(dt) end
 end
 
 
