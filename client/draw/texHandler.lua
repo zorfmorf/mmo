@@ -16,7 +16,7 @@ function texHandler:init()
     self.tex.sprite = {}
     self.tex.actor = {}
     for i,name in ipairs(files) do
-        self:loadTexture("res/" .. name)
+        self:loadTexture("core/res/" .. name)
     end
 end
 

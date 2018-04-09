@@ -1,5 +1,5 @@
 -- libs
-Class = require "lib.hump.class" 
+Class = require "core.lib.hump.class" 
 
 -- lua sockets mainly for millisecond precision and sleep methods
 socket = require "socket"
@@ -8,20 +8,20 @@ socket = require "socket"
 local enet = require "enet"
 
 -- own log handler
-log = require "log"
+log = require "core.misc.log"
 
 -- configuration
-require "defaultconfig"
-require "config"
+require "server.defaultconfig"
+require "server.config"
 
 -- enet wrapper for network handling
-network = require "network"
+network = require "server.network"
 
 -- event handling
-events = require "events"
+events = require "server.events"
 
 -- (re)actors
-require "GameInstance"
+require "server.gameInstance"
 
 -- create and run the individual (re)actors
 local r = GameInstance(DEFAULT_SERVER_NAME, DEFAULT_GAME_PORT)

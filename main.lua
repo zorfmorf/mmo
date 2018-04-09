@@ -1,16 +1,16 @@
 -- libraries
-Class = require "lib.hump.class" 
+Class = require "core.lib.hump.class" 
 enet = require "enet"
 
 -- imports
-require "misc.constants"
-require "misc.util"
-log = require "misc.log"
-texHandler = require "draw.texHandler"
-camera = require "draw.camera"
-drawHandler = require "draw.drawHandler"
-require "world.world"
-require "world.sprite"
+require "core.misc.constants"
+require "core.misc.util"
+log = require "core.misc.log"
+texHandler = require "client.draw.texHandler"
+camera = require "client.draw.camera"
+drawHandler = require "client.draw.drawHandler"
+require "core.world.world"
+require "core.world.sprite"
 
 -- vars
 local host = nil
@@ -30,7 +30,7 @@ function love.load()
     world = World()
     
     if EDITOR_MODE then
-        editor = require "editor.editor"
+        editor = require "client.editor.editor"
         editor:init()
     end
 end

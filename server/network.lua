@@ -9,7 +9,7 @@ end
 
 function network:read_inputs()
     local inputs = {}
-    local event = self.host:service(100)
+    local event = self.host:service(0)
     while event do
         if event.type == "receive" then
             log:info("Got message", event.data, event.peer)
