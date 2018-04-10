@@ -7,14 +7,13 @@ sti = require "core.lib.sti"
 require "core.misc.constants"
 require "core.misc.util"
 log = require "core.misc.log"
-require "core.world.world"
-require "core.world.sprite"
+require "core.world.entity"
 camera = require "client.camera"
+objectHandler = require "client.objectHandler"
 
 -- vars
 local host = nil
 local server = nil
-local world = nil
 
 local map = nil
 
@@ -28,6 +27,8 @@ function love.load()
     camera:init()
     camera:focus(27, 27)
     map = sti("core/map/overworld.lua")
+    objectHandler:init(map)
+    
 end
 
 
@@ -35,7 +36,7 @@ function love.update(dt)
     map:update(dt)
     
     -- placeholder network code
-    --local event = host:service()
+    local event = host:service()
     while event do
         if event.type == "receive" then
             print("Got message: ", event.data, event.peer)
@@ -52,24 +53,15 @@ end
 
 
 function love.draw()
-    --local now = love.timer.getTime()
     love.graphics.setColor(255, 255, 255, 255)
     local tx, ty = camera:apply()
-    
     map:draw(tx, ty, TEXTURE_SCALING, TEXTURE_SCALING)
-
     love.graphics.print(love.timer.getFPS(), 5, 5)
-    
-    
-    --log:debug("drawtime: ", tostring(love.timer.getTime() - now))
 end
 
 
 function love.keypressed(key)
-    if key == "left" then camera:left() end
-    if key == "up" then camera:up() end
-    if key == "down" then camera:down() end
-    if key == "right" then camera:right() end
+
 end
 
 
