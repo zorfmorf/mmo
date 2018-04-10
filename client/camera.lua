@@ -70,7 +70,7 @@ function camera:apply()
     local xw, yw  = self:getVisibleScreenSize()
     local xf = (self.xc + 0.5) * TILE_SIZE
     local yf = (self.yc + 0.5) * TILE_SIZE
-    love.graphics.translate(math.floor(xw / 2 - xf), math.floor(yw / 2 - yf))
+    return math.floor(xw / 2 - xf), math.floor(yw / 2 - yf)
 end
 
 

@@ -1,21 +1,22 @@
 -- libraries
-Class = require "core.lib.hump.class" 
 enet = require "enet"
+Class = require "core.lib.hump.class"
+sti = require "core.lib.sti"
 
 -- imports
 require "core.misc.constants"
 require "core.misc.util"
 log = require "core.misc.log"
-texHandler = require "client.draw.texHandler"
-camera = require "client.draw.camera"
-drawHandler = require "client.draw.drawHandler"
 require "core.world.world"
 require "core.world.sprite"
+camera = require "client.camera"
 
 -- vars
 local host = nil
 local server = nil
 local world = nil
+
+local map = nil
 
 
 function love.load()
@@ -25,19 +26,16 @@ function love.load()
     host = enet.host_create()
     server = host:connect("localhost:25896")
     camera:init()
-    camera:focus(5, 5)
-    texHandler:init()
-    world = World()
-    
-    if EDITOR_MODE then
-        editor = require "client.editor.editor"
-        editor:init()
-    end
+    camera:focus(27, 27)
+    map = sti("core/map/overworld.lua")
 end
 
 
 function love.update(dt)
-    local event = host:service()
+    map:update(dt)
+    
+    -- placeholder network code
+    --local event = host:service()
     while event do
         if event.type == "receive" then
             print("Got message: ", event.data, event.peer)
@@ -50,13 +48,20 @@ function love.update(dt)
         end
         event = host:service()
     end
-    
-    if EDITOR_MODE then editor:update(dt) end
 end
 
 
 function love.draw()
-    drawHandler:draw(world)
+    --local now = love.timer.getTime()
+    love.graphics.setColor(255, 255, 255, 255)
+    local tx, ty = camera:apply()
+    
+    map:draw(tx, ty, TEXTURE_SCALING, TEXTURE_SCALING)
+
+    love.graphics.print(love.timer.getFPS(), 5, 5)
+    
+    
+    --log:debug("drawtime: ", tostring(love.timer.getTime() - now))
 end
 
 
@@ -65,4 +70,9 @@ function love.keypressed(key)
     if key == "up" then camera:up() end
     if key == "down" then camera:down() end
     if key == "right" then camera:right() end
+end
+
+
+function love.resize(w, h)
+	map:resize(w, h)
 end
