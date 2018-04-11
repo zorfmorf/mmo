@@ -1,8 +1,8 @@
 
-local camera = {}
+local t = {}
 
 
-function camera:init()
+function t:init()
     -- current game world coordinate the camera is supposed to be focused on
     self.x = 0
     self.y = 0
@@ -14,13 +14,23 @@ function camera:init()
 end
 
 
-function camera:update()
+function t:getScreenCoordinates()
+    local xw, yw = t:getVisibleScreenSize()
+    local xts = self.xc - xw / (TILE_SIZE * 2)
+    local xte = self.xc + xw / (TILE_SIZE * 2)
+    local yts = self.yc - yw / (TILE_SIZE * 2)
+    local yte = self.yc + yw / (TILE_SIZE * 2)
+    return xts, xte, yts, yte
+end
+
+
+function t:update()
     -- todo: move gracefully to target destination
 end
 
 
 -- focus a given location
-function camera:focus(x, y)
+function t:focus(x, y)
     -- todo: not immediately set to actual target
     self.x = x
     self.y = y
@@ -29,33 +39,33 @@ function camera:focus(x, y)
 end
 
 
-function camera:left()
+function t:left()
     self.xc = self.xc - 1
 end
 
 
-function camera:right()
+function t:right()
     self.xc = self.xc + 1
 end
 
 
-function camera:up()
+function t:up()
     self.yc = self.yc - 1
 end
 
 
-function camera:down()
+function t:down()
     self.yc = self.yc + 1
 end
 
 
-function camera:getVisibleScreenSize()
+function t:getVisibleScreenSize()
     return love.graphics.getWidth() / TEXTURE_SCALING, love.graphics.getHeight() / TEXTURE_SCALING
 end
 
 
 -- returns the upper left and lower right coordinates of visible chunks
-function camera:getChunkCoordinates()
+function t:getChunkCoordinates()
     local xw, yw  = self:getVisibleScreenSize()
     local xts = self.xc - xw / (TILE_SIZE * 2)
     local xte = self.xc + xw / (TILE_SIZE * 2)
@@ -66,7 +76,7 @@ end
 
 
 -- apply the current camera state to graphics
-function camera:apply()
+function t:apply()
     local xw, yw  = self:getVisibleScreenSize()
     local xf = (self.xc + 0.5) * TILE_SIZE
     local yf = (self.yc + 0.5) * TILE_SIZE
@@ -74,4 +84,4 @@ function camera:apply()
 end
 
 
-return camera
+return t

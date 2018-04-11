@@ -25,9 +25,10 @@ function love.load()
     host = enet.host_create()
     server = host:connect("localhost:25896")
     camera:init()
-    camera:focus(27, 27)
     map = sti("core/map/overworld.lua")
     objectHandler:init(map)
+    
+    camera:focus(map:convertPixelToTile(objectHandler.layer.entities[1].x, objectHandler.layer.entities[1].y))
     
 end
 

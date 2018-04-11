@@ -27,22 +27,40 @@ function t:init(map)
 
     -- Entity Updates
     layer.update = function(self, dt)
+        
         layer.objects = {}
         for i,obj in pairs(map.objects) do
-            layer.objects[i] = obj
+            local xs,xe,ys,ye = camera:getScreenCoordinates()
+            local x, y = map:convertPixelToTile(obj.x, obj.y)
+            
+            -- TODO calculate based on object size
+            local BORDER_OBJECT_DRAW_OFFSET = 2
+            local m = BORDER_OBJECT_DRAW_OFFSET
+            if x > xs - m and x < xe + m and y > ys - m and y < ye + m then
+                layer.objects[i] = obj
+            end
         end
         for i,entity in pairs(layer.entities) do
-            layer.objects[1000 + tonumber(i)] = entity
+            --if entity.x > xs - 1 and entity.x < xe + 1 and entity.y > ys - 1 and entity.y < ye + 1 then
+                -- TODO don't use an arbitrary number 1000 and do it differently. also this limits us to 
+                -- 1000 objectes per map which might become a problem with temporary objects
+                -- TODO don't draw when off screen
+                layer.objects[1000 + tonumber(i)] = entity
+            --end
             entity:update(dt)
         end
-        -- TODO: allocate only visible items to draw map
-        -- TODO sort these items
     end
 
     -- entity Drawing
     layer.draw = function(self)
         
-        for i,o in pairs(self.objects) do
+        -- iterate over the items in a sorted order
+        for i,o in spairs(self.objects, 
+                            function(t,a,b)
+                                local l = t[a]
+                                local r = t[b]
+                                return l.y < r.y or (l.y == r.y and l.x < r.x) 
+                            end) do
             -- it's a plain old map entity
             if o.gid then
                 local tile = map.tiles[o.gid]
@@ -55,18 +73,14 @@ function t:init(map)
                     love.graphics.draw(map.tilesets[tile.tileset].image, tile.quad, o.x, o.y, o.rotation, tile.sx, tile.sy, 0, o.height)
                 end
             end
-            -- it's one of our custom entities
+            -- it's one of our custom entities we can just draw them
             if o.type == "entity" then
                 o:draw()
             end
         end
-        
-        -- TODO remove the following stuff and just roll your own draw method
-        --local t = layer.type
-        --layer.type = "objectgroup"
-        --map:drawObjectLayer(layer)
-        --layer.type = t
     end
+    
+    self.layer = layer
 end
 
 
