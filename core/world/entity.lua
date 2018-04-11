@@ -2,7 +2,7 @@
 Entity = Class{}
 
 function Entity:init(x, y)
-    self.shape = "rectangle" -- only needed for sti library
+    self.type = "entity" -- to know how to draw it
     self.sprite = objectHandler:get("ranger")
     self.state = { x=0, y=3 }
     self.x = x
@@ -14,7 +14,7 @@ end
 
 function Entity:update(dt)
     self.state.x = self.state.x + 10 * dt
-    if self.state.x >= 10 then self.state.x = self.state.x - 10 end
+    if self.state.x >= 10 then self.state.x = self.state.x % 10 end
     -- 96 pixels per second
     local speed = 70
 
@@ -40,17 +40,24 @@ function Entity:update(dt)
 end
 
 function Entity:draw()
-    love.graphics.draw(
-        self.sprite.texture,
-        self.sprite.quad[math.floor(self.state.x)][math.floor(self.state.y)],
-        math.floor(self.x),
-        math.floor(self.y),
-        0,
-        1,
-        1,
-        self.ox,
-        self.oy
-    )
+    local tx = math.floor(self.state.x)
+    local ty = math.floor(self.state.y)
+    if self.sprite.quad[tx] and self.sprite.quad[tx][ty] then
+        local quad = self.sprite.quad[tx][ty]
+        love.graphics.draw(
+            self.sprite.texture,
+            quad,
+            math.floor(self.x),
+            math.floor(self.y),
+            0,
+            1,
+            1,
+            self.ox,
+            self.oy
+        )
+    else
+        log:debug("Unable to find entitiy sprite squad", self.sprite.name, tx, ty)
+    end
 
     -- Temporarily draw a point at our location so we know
     -- that our sprite is offset properly

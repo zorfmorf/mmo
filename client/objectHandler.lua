@@ -36,16 +36,36 @@ function t:init(map)
             entity:update(dt)
         end
         -- TODO: allocate only visible items to draw map
+        -- TODO sort these items
     end
 
     -- entity Drawing
     layer.draw = function(self)
         
+        for i,o in pairs(self.objects) do
+            -- it's a plain old map entity
+            if o.gid then
+                local tile = map.tiles[o.gid]
+                if tile then
+                    if tile.animation then
+                        -- TODO wtf is happening here. if animations break its probably because of this
+                        local t = map.tiles[o.gid + (tile.frame - 1)]
+                        if t then tile = t end
+                    end
+                    love.graphics.draw(map.tilesets[tile.tileset].image, tile.quad, o.x, o.y, o.rotation, tile.sx, tile.sy, 0, o.height)
+                end
+            end
+            -- it's one of our custom entities
+            if o.type == "entity" then
+                o:draw()
+            end
+        end
+        
         -- TODO remove the following stuff and just roll your own draw method
-        local t = layer.type
-        layer.type = "objectgroup"
-        map:drawObjectLayer(layer)
-        layer.type = t
+        --local t = layer.type
+        --layer.type = "objectgroup"
+        --map:drawObjectLayer(layer)
+        --layer.type = t
     end
 end
 
