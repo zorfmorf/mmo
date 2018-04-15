@@ -4,33 +4,49 @@ local t = {}
 function t:init()
     self.anim = {}
     
+    self:addDefaultCharacterAnimations("cleric_female", "cleric", 0)
+    self:addDefaultCharacterAnimations("cleric_male", "cleric", 5)
+    self:addDefaultCharacterAnimations("goblin", "goblin", 0)
+    self:addDefaultCharacterAnimations("goblin_shaman", "goblin", 5)
+    
     local name = "butterfly"
     self:load(name, "butterfly", 32, 32, 8)
     self:addMove(name, "idle", "left", false, 0, true, { 10 }) -- does not exist actually
     self:addMove(name, "move", "left", false, 0, true, { 10 })
     self:addMove(name, "attack", "left", false, 1, true, { 10 })
     
-    name = "cleric_male"
-    self:load(name, "cleric", 32, 32, 10)
-    self:addMove(name, "idle", "left", true, 0, true, { 3 })
-    self:addMove(name, "special", "left", true, 1, false, { 5 })
-    self:addMove(name, "move", "left", true, 2, true, { 17 })
-    self:addMove(name, "attack", "left", true, 3, false, { 9 })
-    self:addMove(name, "die", "left", true, 4, false, { 4 })
-    
-    name = "cleric_female"
-    self:load(name, "cleric", 32, 32, 10)
-    self:addMove(name, "idle", "left", true, 5, true, { 3 })
-    self:addMove(name, "special", "left", true, 6, false, { 5 })
-    self:addMove(name, "move", "left", true, 7, true, { 20 })
-    self:addMove(name, "attack", "left", true, 8, false, { 9 })
-    self:addMove(name, "die", "left", true, 9, false, { 5 })
+    name = "eyeball"
+    self:load(name, "eyeball", 32, 32, 8)
+    self:addMove(name, "idle", "left", false, 0, true, { 10 })
+    self:addMove(name, "move", "left", false, 1, true, { 10 })
+    self:addMove(name, "attack", "left", false, 2, true, { 10 })
     
     name = "deer_male"
     self:load(name, "deer_male", 32, 32, 5)
-    self:addMove(name, "idle", "left", true, 0, true, { 2 }) -- does not exist actually
+    self:addMove(name, "idle", "left", true, 0, true, { 2 })
+    self:addMove(name, "move", "left", true, 2, true, { 10 })
+    self:addMove(name, "move", "up", true, 2, true, { 10 })
+    self:addMove(name, "special", "left", true, 1, false, { 5, 3, 0.5, 3, 5 })
+    
+    name = "deer_female"
+    self:load(name, "deer_female", 32, 32, 5)
+    self:addMove(name, "idle", "left", true, 0, true, { 2 })
     self:addMove(name, "move", "left", true, 2, true, { 10 })
     self:addMove(name, "special", "left", true, 1, false, { 5, 3, 0.5, 3, 5 })
+    
+    -- TODO
+    name = "knight"
+    self:load(name, "knight", 32, 32, 5)
+    self:addMove(name, "idle", "left", true, 0, true, { 2 }) -- does not exist actually
+end
+
+function t:addDefaultCharacterAnimations(name, file, offset)
+    self:load(name, file, 32, 32, 10)
+    self:addMove(name, "idle", "left", true, 0 + offset, true, { 3 })
+    self:addMove(name, "special", "left", true, 1 + offset, false, { 5 })
+    self:addMove(name, "move", "left", true, 2 + offset, true, { 20 })
+    self:addMove(name, "attack", "left", true, 3 + offset, false, { 9 })
+    self:addMove(name, "die", "left", true, 4 + offset, false, { 5 })
 end
 
 
@@ -114,7 +130,6 @@ function t:update(entity, dt)
         end
     else
         if entity.state.ani == "move" then
-            entity.state.ani = "idle"
             entity.state.n = 1
         end
     end

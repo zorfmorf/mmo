@@ -119,6 +119,13 @@ function t:update(dt)
         self.player.state.n = 1
         self.player.state.ani = "attack"
     end
+    
+    if love.keyboard.isDown("v") then
+        self.player.state.xmove = nil
+        self.player.state.ymove = nil
+        self.player.state.n = 1
+        self.player.state.ani = "idle"
+    end
 end
 
 return t
