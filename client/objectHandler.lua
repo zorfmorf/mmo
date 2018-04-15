@@ -2,10 +2,6 @@
 local t = {}
 
 function t:init(map)
-    self.sprites = {}
-    
-    -- load all the known and relevant spritesheets
-    self:load("ranger", "core/res/ranger.png", 32, 32)
     
     -- convert object layer to custom layer
     local layer = map:convertToCustomLayer(2)
@@ -24,6 +20,7 @@ function t:init(map)
     -- Create player object
     local player = Entity(spawn.x, spawn.y)
     table.insert(layer.entities, player)
+    self.player = player
 
     -- Entity Updates
     layer.update = function(self, dt)
@@ -84,28 +81,29 @@ function t:init(map)
 end
 
 
-function t:load(name, path, xs, ys)
-    local sprite = {}
-    sprite.xs = xs
-    sprite.ys = ys
-    sprite.texture = love.graphics.newImage(path)
-    local w = sprite.texture:getWidth()
-    local h = sprite.texture:getHeight()
-    local imax = math.floor(w / xs)
-    local jmax = math.floor(h / ys)
-    sprite.quad = {}
-    for i=0,imax-1 do
-        sprite.quad[i] = {}
-        for j=0,jmax-1 do
-            sprite.quad[i][j] = love.graphics.newQuad(i * xs, j * ys, xs, ys, sprite.texture:getDimensions())
-        end
+function t:update(dt)
+    self.player.state.ymove = nil
+    self.player.state.xmove = nil
+
+    -- Move player up
+    if love.keyboard.isDown("w") or love.keyboard.isDown("up") then
+        self.player.state.ymove = -1
     end
-    self.sprites[name] = sprite
-end
 
+    -- Move player down
+    if love.keyboard.isDown("s") or love.keyboard.isDown("down") then
+        self.player.state.ymove = 1
+    end
 
-function t:get(name)
-    return self.sprites[name]
+    -- Move player left
+    if love.keyboard.isDown("a") or love.keyboard.isDown("left") then
+        self.player.state.xmove = -1
+    end
+
+    -- Move player right
+    if love.keyboard.isDown("d") or love.keyboard.isDown("right") then
+        self.player.state.xmove = 1
+    end
 end
 
 return t

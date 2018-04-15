@@ -3,60 +3,41 @@ Entity = Class{}
 
 function Entity:init(x, y)
     self.type = "entity" -- to know how to draw it
-    self.sprite = objectHandler:get("ranger")
-    self.state = { x=0, y=3 }
+    self.sprite = "cleric_female" -- actual sprite
+    self.state = { ani = "idle", dir = "left", n = 1, xmove = nil, ymove = nil} -- animation state
     self.x = x
     self.y = y
-    self.ox = self.sprite.xs / 2
-    self.oy = self.sprite.ys / 1.05
+    self.speed = 70
 end
 
 
 function Entity:update(dt)
-    self.state.x = self.state.x + 10 * dt
-    if self.state.x >= 10 then self.state.x = self.state.x % 10 end
     -- 96 pixels per second
-    local speed = 70
-
-    -- Move player up
-    if love.keyboard.isDown("w") or love.keyboard.isDown("up") then
-        self.y = self.y - speed * dt
-    end
-
-    -- Move player down
-    if love.keyboard.isDown("s") or love.keyboard.isDown("down") then
-        self.y = self.y + speed * dt
-    end
-
-    -- Move player left
-    if love.keyboard.isDown("a") or love.keyboard.isDown("left") then
-        self.x = self.x - speed * dt
-    end
-
-    -- Move player right
-    if love.keyboard.isDown("d") or love.keyboard.isDown("right") then
-        self.x = self.x + speed * dt
-    end
+    local speed = self.speed
+    if self.state.xmove and self.state.ymove then speed = speed / 1.2 end
+    
+    if self.state.ymove then self.y = self.y + self.state.ymove * speed * dt end
+    if self.state.xmove then self.x = self.x + self.state.xmove * speed * dt end
+    
+    animationHandler:update(self, dt)
 end
 
 function Entity:draw()
-    local tx = math.floor(self.state.x)
-    local ty = math.floor(self.state.y)
-    if self.sprite.quad[tx] and self.sprite.quad[tx][ty] then
-        local quad = self.sprite.quad[tx][ty]
+    local tex, quad, ox, oy, s = animationHandler:getDrawInformation(self.sprite, self.state)
+    if tex and quad then
         love.graphics.draw(
-            self.sprite.texture,
+            tex,
             quad,
             math.floor(self.x),
             math.floor(self.y),
             0,
+            1 * s,
             1,
-            1,
-            self.ox,
-            self.oy
+            ox,
+            oy
         )
     else
-        log:debug("Unable to find entitiy sprite squad", self.sprite.name, tx, ty)
+        log:debug("Unable to find entity sprite squad", self)
     end
 
     -- Temporarily draw a point at our location so we know

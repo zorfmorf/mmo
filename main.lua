@@ -10,12 +10,12 @@ log = require "core.misc.log"
 require "core.world.entity"
 camera = require "client.camera"
 objectHandler = require "client.objectHandler"
+animationHandler = require "client.animationHandler"
 
 -- vars
 local host = nil
 local server = nil
-
-local map = nil
+map = nil
 
 
 function love.load()
@@ -27,14 +27,16 @@ function love.load()
     camera:init()
     map = sti("core/map/overworld.lua")
     objectHandler:init(map)
+    animationHandler:init()
     
-    camera:focus(map:convertPixelToTile(objectHandler.layer.entities[1].x, objectHandler.layer.entities[1].y))
+    camera:focus(objectHandler.layer.entities[1])
     
 end
 
 
 function love.update(dt)
     map:update(dt)
+    objectHandler:update(dt)
     
     -- placeholder network code
     local event = host:service()
@@ -62,7 +64,7 @@ end
 
 
 function love.keypressed(key)
-
+    
 end
 
 

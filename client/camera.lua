@@ -30,8 +30,9 @@ end
 
 
 -- focus a given location
-function t:focus(x, y)
+function t:focus(entity)
     -- todo: not immediately set to actual target
+    local x, y = map:convertPixelToTile(entity.x, entity.y)
     self.x = x
     self.y = y
     self.xc = x
