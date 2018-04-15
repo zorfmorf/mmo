@@ -3,7 +3,7 @@ Entity = Class{}
 
 function Entity:init(x, y)
     self.type = "entity" -- to know how to draw it
-    self.sprite = "deer_male" -- actual sprite
+    self.sprite = "rogue_female" -- actual sprite
     self.state = { ani = "idle", dir = "left", n = 1, xmove = nil, ymove = nil} -- animation state
     self.x = x
     self.y = y

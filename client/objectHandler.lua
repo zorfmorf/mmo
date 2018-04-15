@@ -68,7 +68,7 @@ function t:init(map)
                         local t = map.tiles[o.gid + (tile.frame - 1)]
                         if t then tile = t end
                     end
-                    love.graphics.draw(map.tilesets[tile.tileset].image, tile.quad, o.x, o.y, o.rotation, tile.sx, tile.sy, 0, o.height)
+                    love.graphics.draw(map.tilesets[tile.tileset].image, tile.quad, math.floor(o.x), math.floor(o.y), o.rotation, tile.sx, tile.sy, 0, o.height)
                 end
             end
             -- it's one of our custom entities we can just draw them

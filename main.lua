@@ -15,7 +15,7 @@ animationHandler = require "client.animationHandler"
 -- vars
 local host = nil
 local server = nil
-map = nil
+local map = nil
 SERVER = false
 
 
@@ -29,13 +29,12 @@ function love.load()
     map = sti("core/map/overworld.lua")
     objectHandler:init(map)
     animationHandler:init()
-    
-    camera:focus(objectHandler.layer.entities[1])
-    
 end
 
 
 function love.update(dt)
+    camera:focus(map, objectHandler.layer.entities[1])
+    
     map:update(dt)
     objectHandler:update(dt)
     
