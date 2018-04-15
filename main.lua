@@ -16,6 +16,7 @@ animationHandler = require "client.animationHandler"
 local host = nil
 local server = nil
 map = nil
+SERVER = false
 
 
 function love.load()

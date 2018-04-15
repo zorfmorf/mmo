@@ -45,6 +45,7 @@ function t:init(map)
                 layer.objects[1000 + tonumber(i)] = entity
             --end
             entity:update(dt)
+            if SERVER then entity:updateAi(dt) end
         end
     end
 
@@ -103,6 +104,20 @@ function t:update(dt)
     -- Move player right
     if love.keyboard.isDown("d") or love.keyboard.isDown("right") then
         self.player.state.xmove = 1
+    end
+    
+    if love.keyboard.isDown("b") then
+        self.player.state.xmove = nil
+        self.player.state.ymove = nil
+        self.player.state.n = 1
+        self.player.state.ani = "special"
+    end
+    
+    if love.keyboard.isDown("n") then
+        self.player.state.xmove = nil
+        self.player.state.ymove = nil
+        self.player.state.n = 1
+        self.player.state.ani = "attack"
     end
 end
 

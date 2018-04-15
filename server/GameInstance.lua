@@ -1,6 +1,8 @@
 -- A (re)actor for a single gameinstance
 -- Handles a subset of the whole mmo world
 
+SERVER = true
+
 GameInstance = Class{}
 
 function GameInstance:init(name, port)

@@ -6,25 +6,31 @@ function t:init()
     
     local name = "butterfly"
     self:load(name, "butterfly", 32, 32, 8)
-    self:addMove(name, "idle", "left", false, 0, 10, true) -- does not exist actually
-    self:addMove(name, "move", "left", false, 0, 10, true)
-    self:addMove(name, "attack", "left", false, 1, 10, false)
+    self:addMove(name, "idle", "left", false, 0, true, 10) -- does not exist actually
+    self:addMove(name, "move", "left", false, 0, true, 10)
+    self:addMove(name, "attack", "left", false, 1, true, 10)
     
     name = "cleric_male"
     self:load(name, "cleric", 32, 32, 10)
-    self:addMove(name, "idle", "left", true, 0, 10, true)
-    self:addMove(name, "special", "left", true, 1, 5, false)
-    self:addMove(name, "move", "left", true, 2, 20, true)
-    self:addMove(name, "attack", "left", true, 3, 6, false)
-    self:addMove(name, "die", "left", true, 4, 4, false)
+    self:addMove(name, "idle", "left", true, 0, true, 3)
+    self:addMove(name, "special", "left", true, 1, false, 5)
+    self:addMove(name, "move", "left", true, 2, true, 17)
+    self:addMove(name, "attack", "left", true, 3, false, 9)
+    self:addMove(name, "die", "left", true, 4, false, 4)
     
     name = "cleric_female"
     self:load(name, "cleric", 32, 32, 10)
-    self:addMove(name, "idle", "left", true, 5, 3, true)
-    self:addMove(name, "special", "left", true, 6, 5, false)
-    self:addMove(name, "move", "left", true, 7, 20, true)
-    self:addMove(name, "attack", "left", true, 8, 6, false)
-    self:addMove(name, "die", "left", true, 9, 5, false)
+    self:addMove(name, "idle", "left", true, 5, true, 3)
+    self:addMove(name, "special", "left", true, 6, false, 5)
+    self:addMove(name, "move", "left", true, 7, true, 20)
+    self:addMove(name, "attack", "left", true, 8, false, 9)
+    self:addMove(name, "die", "left", true, 9, false, 5)
+    
+    name = "deer_male"
+    self:load(name, "deer_male", 32, 32, 5)
+    self:addMove(name, "idle", "left", true, 0, true, 2) -- does not exist actually
+    self:addMove(name, "move", "left", true, 2, true, 10)
+    self:addMove(name, "special", "left", true, 1, false, 2)
 end
 
 
@@ -42,8 +48,10 @@ function t:load(name, fileName, xs, ys, n)
 end
 
 
-function t:addMove(name, move, dir, revert, row, speed, looping)
+function t:addMove(name, move, dir, revert, row, looping, speed, ...)
     local addOtherDirection = false
+    
+    -- TODO handle different animation speeds, especially for deers
     
     local ani = self.anim[name]
     local m = ani.state[move]
@@ -66,7 +74,7 @@ function t:addMove(name, move, dir, revert, row, speed, looping)
     if addOtherDirection then 
         local newDir = "left"
         if dir == newDir then newDir = "right" end
-        self:addMove(name, move, newDir, not revert, row, speed, looping)
+        self:addMove(name, move, newDir, not revert, row, looping, speed, ...)
     end
 end
 
@@ -87,13 +95,19 @@ end
 function t:update(entity, dt)
     -- switch animation if necessary
     if entity.state.xmove or entity.state.ymove then
-        if entity.state.ani == "idle" then entity.state.ani = "move" end
+        if not (entity.state.ani == "move") then 
+            entity.state.ani = "move"
+            entity.state.n = 1
+        end
         if entity.state.xmove then
             entity.state.dir = "left"
             if entity.state.xmove > 0 then entity.state.dir = "right" end
         end
     else
-        if entity.state.ani == "move" then entity.state.ani = "idle" end
+        if entity.state.ani == "move" then
+            entity.state.ani = "idle"
+            entity.state.n = 1
+        end
     end
     
     -- update animation

@@ -3,11 +3,11 @@ Entity = Class{}
 
 function Entity:init(x, y)
     self.type = "entity" -- to know how to draw it
-    self.sprite = "cleric_female" -- actual sprite
+    self.sprite = "cleric_male" -- actual sprite
     self.state = { ani = "idle", dir = "left", n = 1, xmove = nil, ymove = nil} -- animation state
     self.x = x
     self.y = y
-    self.speed = 70
+    self.speed = 60
 end
 
 
@@ -21,6 +21,12 @@ function Entity:update(dt)
     
     animationHandler:update(self, dt)
 end
+
+
+function Entity:updateAi(dt)
+    -- do nothing per default
+end
+
 
 function Entity:draw()
     local tex, quad, ox, oy, s = animationHandler:getDrawInformation(self.sprite, self.state)
