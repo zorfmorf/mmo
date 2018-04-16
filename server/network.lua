@@ -4,6 +4,7 @@ local network = {}
 function network:init(location, port)
     self.host = enet.host_create(location .. ":" .. port)
     log:info("Bound server to", location, ":", port)
+    self.queue = {}
 end
 
 
@@ -11,17 +12,15 @@ function network:read_inputs()
     local inputs = {}
     local event = self.host:service(0)
     while event do
-        if event.type == "receive" then
-            log:info("Got message", event.data, event.peer)
-            event.peer:send( "pong" )
-        elseif event.type == "connect" then
-            log:info(event.peer, "connected.")
-        elseif event.type == "disconnect" then
-            log:info(event.peer, "disconnected.")
-        end
-        event = self.host:service()
+        table.insert(inputs, event)
+        event = self.host:service(0)
     end
     return inputs
+end
+
+
+function network:addMessage(m)
+    table.insert(self.queue, m)
 end
 
 

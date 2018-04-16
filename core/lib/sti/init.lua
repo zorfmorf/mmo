@@ -45,7 +45,7 @@ local function new(map, plugins, ox, oy)
 	end
 
     -- FIXME BEGIN PATCH
-    lg.isCreated = false
+    if SERVER then lg.isCreated = false end
     -- FIXME END PATCH
     
 	map:init(dir, plugins, ox, oy)

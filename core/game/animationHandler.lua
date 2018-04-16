@@ -3,21 +3,22 @@ local t = {}
 
 function t:init()
     self.anim = {}
+    self.heroes = {}
     
-    self:addDefaultCharacterAnimations("cleric_male", "cleric", 0)
-    self:addDefaultCharacterAnimations("cleric_female", "cleric", 5)
-    self:addDefaultCharacterAnimations("goblin", "goblin", 0)
-    self:addDefaultCharacterAnimations("goblin_shaman", "goblin", 5)
-    self:addDefaultCharacterAnimations("orc", "orc", 0)
-    self:addDefaultCharacterAnimations("orc_rogue", "orc", 5)
-    self:addDefaultCharacterAnimations("ranger_male", "ranger", 0)
-    self:addDefaultCharacterAnimations("ranger_female", "ranger", 5)
-    self:addDefaultCharacterAnimations("rogue_male", "rogue", 0)
-    self:addDefaultCharacterAnimations("rogue_female", "rogue", 5)
-    self:addDefaultCharacterAnimations("warrior_male", "warrior", 0)
-    self:addDefaultCharacterAnimations("warrior_female", "warrior", 5)
-    self:addDefaultCharacterAnimations("wizard_male", "wizard", 0)
-    self:addDefaultCharacterAnimations("wizard_female", "wizard", 5)
+    self:addDefaultCharacterAnimations("cleric_male", "cleric", 0, true)
+    self:addDefaultCharacterAnimations("cleric_female", "cleric", 5, true)
+    self:addDefaultCharacterAnimations("goblin", "goblin", 0, false)
+    self:addDefaultCharacterAnimations("goblin_shaman", "goblin", 5, false)
+    self:addDefaultCharacterAnimations("orc", "orc", 0, false)
+    self:addDefaultCharacterAnimations("orc_rogue", "orc", 5, false)
+    self:addDefaultCharacterAnimations("ranger_male", "ranger", 0, true)
+    self:addDefaultCharacterAnimations("ranger_female", "ranger", 5, true)
+    self:addDefaultCharacterAnimations("rogue_male", "rogue", 0, true)
+    self:addDefaultCharacterAnimations("rogue_female", "rogue", 5, true)
+    self:addDefaultCharacterAnimations("warrior_male", "warrior", 0, true)
+    self:addDefaultCharacterAnimations("warrior_female", "warrior", 5, true)
+    self:addDefaultCharacterAnimations("wizard_male", "wizard", 0, true)
+    self:addDefaultCharacterAnimations("wizard_female", "wizard", 5, true)
     
     local name = "butterfly"
     self:load(name, "butterfly", 32, 32, 8)
@@ -50,13 +51,14 @@ function t:init()
     self:addMove(name, "idle", "left", true, 0, true, { 2 }) -- does not exist actually
 end
 
-function t:addDefaultCharacterAnimations(name, file, offset)
+function t:addDefaultCharacterAnimations(name, file, offset, hero)
     self:load(name, file, 32, 32, 10)
     self:addMove(name, "idle", "left", true, 0 + offset, false, { 3 })
     self:addMove(name, "special", "left", true, 1 + offset, false, { 15 })
     self:addMove(name, "move", "left", true, 2 + offset, true, { 15 })
     self:addMove(name, "attack", "left", true, 3 + offset, false, { 18 })
     self:addMove(name, "die", "left", true, 4 + offset, false, { 5 })
+    if hero then table.insert(self.heroes, name) end
 end
 
 

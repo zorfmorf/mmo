@@ -7,20 +7,14 @@ function t:init(map)
     local layer = map:convertToCustomLayer(2)
     
     -- Get player spawn object
-    local spawn
     for k, object in pairs(map.objects) do
         if object.name == "spawn" then
-            spawn = object
+            self.spawn = object
             break
         end
     end
 
     layer.entities = {}
-    
-    -- Create player object
-    local player = Entity(spawn.x, spawn.y)
-    table.insert(layer.entities, player)
-    self.player = player
 
     -- Entity Updates
     layer.update = function(self, dt)
@@ -91,6 +85,7 @@ end
 
 
 function t:update(dt)
+    --[[
     self.player.state.ymove = nil
     self.player.state.xmove = nil
 
@@ -127,6 +122,12 @@ function t:update(dt)
             self.player:playAnimation("idle")
         end
     end
+    ]]--
+end
+
+
+function t:addEntity(entity)
+    table.insert(self.layer.entities, entity)
 end
 
 return t

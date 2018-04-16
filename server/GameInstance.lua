@@ -18,19 +18,26 @@ sti = require "core.lib.sti"
 
 -- classes
 require "core.world.entity"
+require "core.world.player"
 
 function GameInstance:init(name, port)
     self.name = name
     self.port = port
     
     -- require stuff
-    self.objectHandler = require "client.objectHandler"
-    animationHandler = require "client.animationHandler"
+    self.objectHandler = require "core.game.objectHandler"
+    self.animationHandler = require "core.game.animationHandler"
+    self.playerHandler = require "server.playerHandler"
+    
+    -- create connections
+    self.playerHandler.objectHandler = self.objectHandler
+    self.playerHandler.animationHandler = self.animationHandler
     
     -- init game stuff
     self.map = sti("core/map/overworld.lua")
+    self.playerHandler:init()
     self.objectHandler:init(self.map)
-    animationHandler:init()
+    self.animationHandler:init()
     
     -- dt counter
     self.dt = -1
@@ -39,7 +46,9 @@ end
 
 -- 
 function GameInstance:process_inputs(inputs)
-    
+    for i,event in ipairs(inputs) do
+        self.playerHandler:handleEvent(event)
+    end
 end
 
 

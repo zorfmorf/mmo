@@ -8,9 +8,11 @@ require "core.misc.constants"
 require "core.misc.util"
 log = require "core.misc.log"
 require "core.world.entity"
+require "core.world.player"
 camera = require "client.camera"
-objectHandler = require "client.objectHandler"
-animationHandler = require "client.animationHandler"
+objectHandler = require "core.game.objectHandler"
+animationHandler = require "core.game.animationHandler"
+networkHandler = require "client.networkHandler"
 
 -- vars
 local host = nil
@@ -22,12 +24,11 @@ function love.load()
     -- TODO debug
     if arg[#arg] == "-debug" then require("mobdebug").start() end
     
-    host = enet.host_create()
-    server = host:connect("localhost:25896")
     camera:init()
     map = sti("core/map/overworld.lua")
     objectHandler:init(map)
     animationHandler:init()
+    networkHandler:init()
 end
 
 
@@ -36,21 +37,7 @@ function love.update(dt)
     
     map:update(dt)
     objectHandler:update(dt)
-    
-    -- placeholder network code
-    local event = host:service()
-    while event do
-        if event.type == "receive" then
-            print("Got message: ", event.data, event.peer)
-            event.peer:send( "ping" )
-        elseif event.type == "connect" then
-            print(event.peer, "connected.")
-            event.peer:send( "ping" )
-        elseif event.type == "disconnect" then
-            print(event.peer, "disconnected.")
-        end
-        event = host:service()
-    end
+    networkHandler:read_inputs(dt)
 end
 
 
