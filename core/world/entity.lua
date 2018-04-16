@@ -23,11 +23,14 @@ function Entity:update(dt)
 end
 
 
-function Entity:playAnimtion(name)
-    self.player.state.xmove = nil
-    self.player.state.ymove = nil
-    self.player.state.n = 1
-    self.player.state.ani = name
+function Entity:playAnimation(name)
+    if not (self.state.ani == name) then
+        self.state.xmove = nil
+        self.state.ymove = nil
+        self.state.n = 1
+        self.state.ani = name
+        self.state.default = false
+    end
 end
 
 

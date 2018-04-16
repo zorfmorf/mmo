@@ -113,42 +113,20 @@ function t:addMove(name, move, dir, revert, row, looping, ...)
     end
 end
 
-
-function t:getAni(sprite, state)
-    local ani = self.anim[sprite]
-    if ani then
-        if ani.state[state.ani] and ani.state[state.ani][state.dir] then
-            local n = math.floor(state.n)
-            if n < 1 or n > ani.n then
-                log:warn("Exceeded draw n for ", sprite, n)
-                n = 1
-            end
-            local info = ani.state[state.ani][state.dir][n]
-            return ani, info
-        else
-            log:warn("Missing animation or direction for ", sprite, state.ani, state.dir)
-        end
-    else
-        log:warn("Can't find spritesheet ", sprite)
-    end
-end
-
 function t:getDrawInformation(sprite, state)
-    local ani, info = self:getAni(sprite, state)
-    if ani and info then
-        -- in case of default animation we show the first frame of idle animation
-        if state.default then
-            local info = ani.state["idle"][state.dir][1]
-            return ani.img, ani.quad[info.quad], ani.ox, ani.oy, ani.state[state.ani][state.dir].revert
-        end
+    local ani = self.anim[sprite]
+    if state.default then
+        local info = ani.state["idle"][state.dir][1]
         return ani.img, ani.quad[info.quad], ani.ox, ani.oy, ani.state[state.ani][state.dir].revert
     end
+    local info = ani.state[state.ani][state.dir][math.floor(state.n)]
+    return ani.img, ani.quad[info.quad], ani.ox, ani.oy, ani.state[state.ani][state.dir].revert
 end
 
 
 function t:getUpdateInformation(sprite, state)
-    local ani, info = self:getAni(sprite, state)
-    return ani.n, info.speed
+    local ani = self.anim[sprite]
+    return ani.n, ani.state[state.ani][state.dir][math.floor(state.n)].speed
 end
 
 
@@ -158,6 +136,7 @@ function t:update(entity, dt)
         if not (entity.state.ani == "move") then 
             entity.state.ani = "move"
             entity.state.n = 1
+            entity.state.default = false
         end
         if entity.state.xmove then
             entity.state.dir = "left"
