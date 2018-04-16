@@ -25,27 +25,35 @@ function t:init(map)
     -- Entity Updates
     layer.update = function(self, dt)
         
-        layer.objects = {}
-        for i,obj in pairs(map.objects) do
-            local xs,xe,ys,ye = camera:getScreenCoordinates()
-            local x, y = map:convertPixelToTile(obj.x, obj.y)
-            
-            -- TODO calculate based on object size
-            local BORDER_OBJECT_DRAW_OFFSET = 2
-            local m = BORDER_OBJECT_DRAW_OFFSET
-            if x > xs - m and x < xe + m and y > ys - m and y < ye + m then
-                layer.objects[i] = obj
+        -- just update entities for server
+        if SERVER then
+            for i,entity in pairs(layer.entities) do
+                entity:update(dt)
+                entity:updateAi(dt)
             end
-        end
-        for i,entity in pairs(layer.entities) do
-            --if entity.x > xs - 1 and entity.x < xe + 1 and entity.y > ys - 1 and entity.y < ye + 1 then
-                -- TODO don't use an arbitrary number 1000 and do it differently. also this limits us to 
-                -- 1000 objectes per map which might become a problem with temporary objects
-                -- TODO don't draw when off screen
-                layer.objects[1000 + tonumber(i)] = entity
-            --end
-            entity:update(dt)
-            if SERVER then entity:updateAi(dt) end
+        else
+            -- on client we need to calculate what to draw
+            layer.objects = {}
+            for i,obj in pairs(map.objects) do
+                local xs,xe,ys,ye = camera:getScreenCoordinates()
+                local x, y = map:convertPixelToTile(obj.x, obj.y)
+                
+                -- TODO calculate based on object size
+                local BORDER_OBJECT_DRAW_OFFSET = 2
+                local m = BORDER_OBJECT_DRAW_OFFSET
+                if x > xs - m and x < xe + m and y > ys - m and y < ye + m then
+                    layer.objects[i] = obj
+                end
+            end
+            for i,entity in pairs(layer.entities) do
+                --if entity.x > xs - 1 and entity.x < xe + 1 and entity.y > ys - 1 and entity.y < ye + 1 then
+                    -- TODO don't use an arbitrary number 1000 and do it differently. also this limits us to 
+                    -- 1000 objectes per map which might become a problem with temporary objects
+                    -- TODO don't draw when off screen
+                    layer.objects[1000 + tonumber(i)] = entity
+                --end
+                entity:update(dt)
+            end
         end
     end
 
@@ -86,36 +94,38 @@ function t:update(dt)
     self.player.state.ymove = nil
     self.player.state.xmove = nil
 
-    -- Move player up
-    if love.keyboard.isDown("w") or love.keyboard.isDown("up") then
-        self.player.state.ymove = -1
-    end
+    if not SERVER then
+        -- Move player up
+        if love.keyboard.isDown("w") or love.keyboard.isDown("up") then
+            self.player.state.ymove = -1
+        end
 
-    -- Move player down
-    if love.keyboard.isDown("s") or love.keyboard.isDown("down") then
-        self.player.state.ymove = 1
-    end
+        -- Move player down
+        if love.keyboard.isDown("s") or love.keyboard.isDown("down") then
+            self.player.state.ymove = 1
+        end
 
-    -- Move player left
-    if love.keyboard.isDown("a") or love.keyboard.isDown("left") then
-        self.player.state.xmove = -1
-    end
+        -- Move player left
+        if love.keyboard.isDown("a") or love.keyboard.isDown("left") then
+            self.player.state.xmove = -1
+        end
 
-    -- Move player right
-    if love.keyboard.isDown("d") or love.keyboard.isDown("right") then
-        self.player.state.xmove = 1
-    end
-    
-    if love.keyboard.isDown("b") then
-        self.player:playAnimation("special")
-    end
-    
-    if love.keyboard.isDown("n") then
-        self.player:playAnimation("attack")
-    end
-    
-    if love.keyboard.isDown("v") then
-        self.player:playAnimation("idle")
+        -- Move player right
+        if love.keyboard.isDown("d") or love.keyboard.isDown("right") then
+            self.player.state.xmove = 1
+        end
+        
+        if love.keyboard.isDown("b") then
+            self.player:playAnimation("special")
+        end
+        
+        if love.keyboard.isDown("n") then
+            self.player:playAnimation("attack")
+        end
+        
+        if love.keyboard.isDown("v") then
+            self.player:playAnimation("idle")
+        end
     end
 end
 

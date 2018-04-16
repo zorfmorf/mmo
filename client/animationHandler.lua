@@ -62,7 +62,7 @@ end
 
 function t:load(name, fileName, xs, ys, n)
     local r = {}
-    r.img = love.graphics.newImage("core/res/"..fileName..".png")
+    if not SERVER then r.img = love.graphics.newImage("core/res/"..fileName..".png") end
     r.xs = xs
     r.ys = ys
     r.ox = xs / 2
@@ -101,8 +101,13 @@ function t:addMove(name, move, dir, revert, row, looping, ...)
     if revert then m[dir].revert = -1 end
     for i=1,ani.n do
         local qn = #ani.quad + 1
-        ani.quad[qn] = love.graphics.newQuad((i - 1) * ani.xs, row * ani.ys, 
+        if SERVER then
+            ani.quad[qn] = "quad"
+        else
+            ani.quad[qn] = love.graphics.newQuad((i - 1) * ani.xs, row * ani.ys, 
                                         ani.xs, ani.ys, ani.img:getDimensions())
+        end
+        
         m[dir][i] = { quad = qn, speed = speeds[i] }
     end
     self.anim[name].state[move] = m

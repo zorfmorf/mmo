@@ -12,3 +12,6 @@ NETWORK_TICK_RATE = 0.1
 
 -- logs levels
 LOG_LEVEL = LOG_INFO
+
+-- just so that some code knows it shouldn't be run (draw)
+SERVER = true

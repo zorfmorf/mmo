@@ -44,6 +44,10 @@ local function new(map, plugins, ox, oy)
 		map = setmetatable(assert(love.filesystem.load(map))(), Map)
 	end
 
+    -- FIXME BEGIN PATCH
+    lg.isCreated = false
+    -- FIXME END PATCH
+    
 	map:init(dir, plugins, ox, oy)
 
 	return map
