@@ -114,16 +114,41 @@ function t:addMove(name, move, dir, revert, row, looping, ...)
 end
 
 
-function t:getDrawInformation(sprite, state)
+function t:getAni(sprite, state)
     local ani = self.anim[sprite]
-    local info = ani.state[state.ani][state.dir][math.floor(state.n)]
-    return ani.img, ani.quad[info.quad], ani.ox, ani.oy, ani.state[state.ani][state.dir].revert
+    if ani then
+        if ani.state[state.ani] and ani.state[state.ani][state.dir] then
+            local n = math.floor(state.n)
+            if n < 1 or n > ani.n then
+                log:warn("Exceeded draw n for ", sprite, n)
+                n = 1
+            end
+            local info = ani.state[state.ani][state.dir][n]
+            return ani, info
+        else
+            log:warn("Missing animation or direction for ", sprite, state.ani, state.dir)
+        end
+    else
+        log:warn("Can't find spritesheet ", sprite)
+    end
+end
+
+function t:getDrawInformation(sprite, state)
+    local ani, info = self:getAni(sprite, state)
+    if ani and info then
+        -- in case of default animation we show the first frame of idle animation
+        if state.default then
+            local info = ani.state["idle"][state.dir][1]
+            return ani.img, ani.quad[info.quad], ani.ox, ani.oy, ani.state[state.ani][state.dir].revert
+        end
+        return ani.img, ani.quad[info.quad], ani.ox, ani.oy, ani.state[state.ani][state.dir].revert
+    end
 end
 
 
 function t:getUpdateInformation(sprite, state)
-    local ani = self.anim[sprite]
-    return ani.n, ani.state[state.ani][state.dir][math.floor(state.n)].speed
+    local ani, info = self:getAni(sprite, state)
+    return ani.n, info.speed
 end
 
 
@@ -147,7 +172,13 @@ function t:update(entity, dt)
     -- update animation
     local aniState = self.anim[entity.sprite].state[entity.state.ani]
     local n, s = self:getUpdateInformation(entity.sprite, entity.state)
-    entity.state.n = entity.state.n + s * dt
+    
+    -- only advance animations if we are not displaying the default animation
+    if not (entity.state.ani.default) then
+        entity.state.n = entity.state.n + s * dt
+    end
+    
+    -- loop around or fall back to default animation
     if entity.state.n >= n + 1 then
         if aniState.looping then 
             entity.state.n = entity.state.n % n + 1
@@ -155,8 +186,10 @@ function t:update(entity, dt)
             if entity.state.ani == "die" then
                 entity.state.n = n
             else
-                entity.state.n = 1
-                entity.state.ani = "move"
+                if self.anim[entity.sprite].state["idle"] then
+                    entity.state.n = 1
+                    entity.state.default = true
+                end
             end
         end
     end

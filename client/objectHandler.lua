@@ -107,24 +107,15 @@ function t:update(dt)
     end
     
     if love.keyboard.isDown("b") then
-        self.player.state.xmove = nil
-        self.player.state.ymove = nil
-        self.player.state.n = 1
-        self.player.state.ani = "special"
+        self.player:playAnimation("special")
     end
     
     if love.keyboard.isDown("n") then
-        self.player.state.xmove = nil
-        self.player.state.ymove = nil
-        self.player.state.n = 1
-        self.player.state.ani = "attack"
+        self.player:playAnimation("attack")
     end
     
     if love.keyboard.isDown("v") then
-        self.player.state.xmove = nil
-        self.player.state.ymove = nil
-        self.player.state.n = 1
-        self.player.state.ani = "idle"
+        self.player:playAnimation("idle")
     end
 end
 
