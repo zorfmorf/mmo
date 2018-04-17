@@ -2,6 +2,7 @@
 Entity = Class{}
 
 function Entity:init(x, y)
+    self.id = math.random(1000000,9999999) -- TODO find actual range
     self.type = "entity" -- to know how to draw it
     self.sprite = "rogue_female" -- actual sprite
     self.state = { ani = "idle", dir = "left", n = 1, xmove = nil, ymove = nil} -- animation state

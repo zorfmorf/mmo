@@ -5,13 +5,8 @@ SERVER = true
 
 GameInstance = Class{}
 
--- spoof love graphics module
-love = {}
-love.graphics = {}
-love.graphics.isCreated = false
-love.filesystem = {}
-love.filesystem.load = function(path) return loadfile(path) end
-love.data = {}
+-- simulate love functionality so STI will work
+require "server.loveFaker"
 
 -- map handling
 sti = require "core.lib.sti"
@@ -61,7 +56,11 @@ end
 
 -- Send regular, delta-ed client updates
 function GameInstance:post_updates_to_clients(dt)
+    -- first create update messages for all client states
     
+    
+    -- then send all queued, outgoing messages
+    network:flush()
 end
 
 
