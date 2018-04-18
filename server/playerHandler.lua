@@ -41,6 +41,23 @@ function t:createPlayer(id, index)
                         body = "spawn".."#"..p.id.."#"..p.sprite.."#"..p.x.."#"..p.y
                     })
 end
+    --self.state = { ani = "idle", dir = "left", n = 1, xmove = nil, ymove = nil} -- animation state
+    --self.x = x
+    --self.y = y
+
+function t:createUpdateMessage()
+    local m = ""
+    
+    for i,e in pairs(self.objectHandler.layer.entities) do
+        m = m.."##"..e.id.."#"..e.x.."#"..e.y.."#"..e.ani.."#"..e.dir.."#"..e.n.."#"..e.ani.."#"..e.xmove.."#"..e.ymove
+    end
+    
+    network:addMessage({ 
+                    message = "update",
+                    target = "all",
+                    body = m
+                })
+end
 
 
 return t

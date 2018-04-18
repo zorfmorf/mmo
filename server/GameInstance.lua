@@ -56,11 +56,11 @@ end
 
 -- Send regular, delta-ed client updates
 function GameInstance:post_updates_to_clients(dt)
-    -- first create update messages for all client states
-    
-    
     -- then send all queued, outgoing messages
     network:flush()
+    
+    -- first create update messages for all client states
+    self.playerHandler:createUpdateMessage()
 end
 
 

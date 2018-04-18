@@ -15,7 +15,7 @@ function t:read_inputs()
     local event = self.host:service(0)
     while event do
         if event.type == "receive" then
-            --print("Got message: ", event.data, event.peer)
+            print("Got message: ", event.data, event.peer)
             --event.peer:send( "ping" )
         elseif event.type == "connect" then
             --print(event.peer, "connected.")
