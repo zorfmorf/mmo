@@ -19,8 +19,6 @@ function Entity:update(dt)
     
     if self.state.ymove then self.y = self.y + self.state.ymove * speed * dt end
     if self.state.xmove then self.x = self.x + self.state.xmove * speed * dt end
-    
-    animationHandler:update(self, dt)
 end
 
 

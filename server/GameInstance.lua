@@ -31,7 +31,7 @@ function GameInstance:init(name, port)
     -- init game stuff
     self.map = sti("core/map/overworld.lua")
     self.playerHandler:init()
-    self.objectHandler:init(self.map)
+    self.objectHandler:init(self.map, self.animationHandler)
     self.animationHandler:init()
     
     -- dt counter
@@ -56,11 +56,12 @@ end
 
 -- Send regular, delta-ed client updates
 function GameInstance:post_updates_to_clients(dt)
-    -- then send all queued, outgoing messages
-    network:flush()
-    
     -- first create update messages for all client states
     self.playerHandler:createUpdateMessage()
+    
+    -- then send all queued, outgoing messages
+    network:sendAll()
+    network:flush()
 end
 
 

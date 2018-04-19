@@ -26,7 +26,7 @@ function love.load()
     
     camera:init()
     map = sti("core/map/overworld.lua")
-    objectHandler:init(map)
+    objectHandler:init(map, animationHandler)
     animationHandler:init()
     networkHandler:init()
 end

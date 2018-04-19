@@ -1,7 +1,7 @@
 
 local t = {}
 
-function t:init(map)
+function t:init(map, animationHandler)
     
     -- convert object layer to custom layer
     local layer = map:convertToCustomLayer(2)
@@ -23,6 +23,7 @@ function t:init(map)
         if SERVER then
             for i,entity in pairs(layer.entities) do
                 entity:update(dt)
+                animationHandler:update(entity, dt)
                 entity:updateAi(dt)
             end
         else
@@ -47,6 +48,7 @@ function t:init(map)
                     layer.objects[1000 + tonumber(i)] = entity
                 --end
                 entity:update(dt)
+                animationHandler:update(entity, dt)
             end
         end
     end

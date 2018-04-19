@@ -33,12 +33,13 @@ function t:createPlayer(id, index)
     end
     local p = Player(id, index, spawn.x, spawn.y)
     p.sprite = self.animationHandler.heroes[math.random(1, #self.animationHandler.heroes)]
-    log:info("New player connected: ", id, p.sprite)
     self.players[p.id] = p
+    table.insert(self.objectHandler.layer.entities, p)
+    log:info("New player connected: ", id, p.sprite)
     network:addMessage({ 
                         message = "spawn",
                         target = "all",
-                        body = "spawn".."#"..p.id.."#"..p.sprite.."#"..p.x.."#"..p.y
+                        data = "spawn".."#"..p.id.."#"..p.sprite.."#"..p.x.."#"..p.y
                     })
 end
     --self.state = { ani = "idle", dir = "left", n = 1, xmove = nil, ymove = nil} -- animation state
@@ -49,13 +50,17 @@ function t:createUpdateMessage()
     local m = ""
     
     for i,e in pairs(self.objectHandler.layer.entities) do
-        m = m.."##"..e.id.."#"..e.x.."#"..e.y.."#"..e.ani.."#"..e.dir.."#"..e.n.."#"..e.ani.."#"..e.xmove.."#"..e.ymove
+        local xm = e.state.xmove
+        local ym = e.state.ymove
+        if not xm then xm = "nil" end
+        if not ym then ym = "nil" end
+        m = m.."##"..e.id.."#"..e.x.."#"..e.y.."#"..e.state.ani.."#"..e.state.dir.."#"..e.state.n.."#"..xm.."#"..ym
     end
     
     network:addMessage({ 
                     message = "update",
                     target = "all",
-                    body = m
+                    data = m
                 })
 end
 
