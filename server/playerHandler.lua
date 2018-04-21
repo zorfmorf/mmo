@@ -39,24 +39,18 @@ function t:createPlayer(id, index)
     network:addMessage({ 
                         message = "spawn",
                         target = "all",
-                        data = "spawn".."#"..p.id.."#"..p.sprite.."#"..p.x.."#"..p.y
+                        data = "spawn".."##"..p.id.."#"..p.sprite.."#"..p.x.."#"..p.y
                     })
 end
-    --self.state = { ani = "idle", dir = "left", n = 1, xmove = nil, ymove = nil} -- animation state
-    --self.x = x
-    --self.y = y
+
 
 function t:createUpdateMessage()
     local m = ""
     
     for i,e in pairs(self.objectHandler.layer.entities) do
-        local xm = e.state.xmove
-        local ym = e.state.ymove
-        if not xm then xm = "nil" end
-        if not ym then ym = "nil" end
-        m = m.."##"..e.id.."#"..e.x.."#"..e.y.."#"..e.state.ani.."#"..e.state.dir.."#"..e.state.n.."#"..xm.."#"..ym
+        m = m.."update##"..m:encode()
     end
-    
+
     network:addMessage({ 
                     message = "update",
                     target = "all",
