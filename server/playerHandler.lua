@@ -1,7 +1,7 @@
 
 local t = {}
 
-function t:init()
+function t:init(serializer)
     self.players = {}
 end
 
@@ -45,10 +45,10 @@ end
 
 
 function t:createUpdateMessage()
-    local m = ""
+    local m = "update"
     
     for i,e in pairs(self.objectHandler.layer.entities) do
-        m = m.."update##"..m:encode()
+        m = m.."##"..self.serializer:serializeEntity(e)
     end
 
     network:addMessage({ 

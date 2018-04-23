@@ -13,6 +13,8 @@ camera = require "client.camera"
 objectHandler = require "core.game.objectHandler"
 animationHandler = require "core.game.animationHandler"
 networkHandler = require "client.networkHandler"
+serializer = require "core.serialization.serializer"
+inputHandler = require "client.inputHandler"
 
 -- vars
 local host = nil
@@ -29,6 +31,7 @@ function love.load()
     objectHandler:init(map, animationHandler)
     animationHandler:init()
     networkHandler:init()
+    serializer:init(objectHandler)
 end
 
 
@@ -50,7 +53,7 @@ end
 
 
 function love.keypressed(key)
-    
+    inputHandler:keypressed(key)
 end
 
 

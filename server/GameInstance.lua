@@ -23,15 +23,18 @@ function GameInstance:init(name, port)
     self.objectHandler = require "core.game.objectHandler"
     self.animationHandler = require "core.game.animationHandler"
     self.playerHandler = require "server.playerHandler"
+    self.serializer = require "core.serialization.serializer"
     
     -- create connections
     self.playerHandler.objectHandler = self.objectHandler
     self.playerHandler.animationHandler = self.animationHandler
+    self.playerHandler.serializer = self.serializer
     
     -- init game stuff
     self.map = sti("core/map/overworld.lua")
     self.playerHandler:init()
     self.objectHandler:init(self.map, self.animationHandler)
+    self.serializer:init(self.objectHandler)
     self.animationHandler:init()
     
     -- dt counter
