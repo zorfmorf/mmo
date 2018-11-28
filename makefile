@@ -1,17 +1,18 @@
+all: client server
+
 clean:
-	rm -r tmp*
-	rm -r bin
+	@rm -r tmp-client | true
+	@rm -r bin | true
 
 client: clean
-	mkdir tmp-client
-	mkdir bin
-	cp -r core/* tmp-client
-	cp -r client/* tmp-client
-	zip bin/mmo.lua tmp-client/*
+	@mkdir bin | true
+	@mkdir tmp-client | true
+	@cp -r core/* tmp-client
+	@cp -r client/* tmp-client
+	@cd tmp-client; zip -r ../bin/mmo.love *; cd ..
+	@rm -r tmp-client
 
 server: clean
-	mkdir tmp-server
-	cp -r core/* tmp-server
-	cp -r server/* tmp-server
-
-all: client server
+	@mkdir -p bin/server | true
+	@cp -r core/* bin/server
+	@cp -r server/* bin/server
