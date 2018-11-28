@@ -8,17 +8,17 @@ socket = require "socket"
 local enet = require "enet"
 
 -- own log handler
-log = require "core.misc.log"
+log = require "core.util.log"
 
 -- configuration
-require "server.defaultconfig"
-require "server.config"
+-- TODO write config handler that generates default config if not existent
+require "config"
 
 -- enet wrapper for network handling
-network = require "server.network"
+network = require "network.network"
 
 -- event handling
-events = require "server.events"
+events = require "network.events"
 
 -- (re)actors
 require "server.gameInstance"
