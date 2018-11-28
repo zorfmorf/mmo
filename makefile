@@ -1,8 +1,8 @@
 all: client server
 
 clean:
-	@rm -r tmp-client | true
-	@rm -r bin | true
+	@rm -rf tmp-client | true
+	@rm -rf bin | true
 
 client: clean
 	@mkdir bin | true
@@ -10,7 +10,7 @@ client: clean
 	@cp -r core/* tmp-client
 	@cp -r client/* tmp-client
 	@cd tmp-client; zip -r ../bin/mmo.love *; cd ..
-	@rm -r tmp-client
+	@rm -rf tmp-client
 
 server: clean
 	@mkdir -p bin/server | true
