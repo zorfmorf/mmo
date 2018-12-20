@@ -18,25 +18,38 @@ LOG_STR[LOG_ERROR] = "ERROR"
 LOG_LEVEL = LOG_DEBUG
 
 
--- log with level
+-- Actually note down message
 function log:log(level, ...)
     -- TODO keep in memory and dump periodically / on demand
+    -- TODO enable print suppression?
     print(LOG_STR[level], ...)
 end
 
 
+-- Write all buffered log contents
+function log:dump()
+    -- TODO implement
+end
+
+
 function log:debug(...)
-    if LOG_LEVEL == LOG_DEBUG then self:log(LOG_DEBUG, ...) end
+    if LOG_LEVEL == LOG_DEBUG then
+        self:log(LOG_DEBUG, ...)
+    end
 end
 
 
 function log:info(...)
-    if LOG_LEVEL < LOG_WARN then self:log(LOG_INFO, ...) end
+    if LOG_LEVEL < LOG_WARN then
+        self:log(LOG_INFO, ...)
+    end
 end
 
 
 function log:warn(...)
-    if LOG_LEVEL < LOG_ERROR then self:log(LOG_WARN, ...) end
+    if LOG_LEVEL < LOG_ERROR then
+        self:log(LOG_WARN, ...)
+    end
 end
 
 

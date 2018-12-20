@@ -13,6 +13,7 @@ require "core.util.util"
 --objectHandler = require "core.game.objectHandler"
 --animationHandler = require "core.game.animationHandler"
 local clientConnector = require "network.clientConnector"
+local trigger = require "core.trigger.trigger"
 --serializer = require "core.serialization.serializer"
 --inputHandler = require "client.inputHandler"
 
@@ -31,6 +32,7 @@ function love.load()
     --objectHandler:init(map, animationHandler)
     --animationHandler:init()
     clientConnector:init()
+    trigger:init()
     --serializer:init(objectHandler)
 end
 
