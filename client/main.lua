@@ -1,7 +1,7 @@
 -- libraries
 enet = require "enet"
-Class = require "core.lib.hump.class"
-sti = require "core.lib.sti"
+Class = require "lib.hump.class"
+sti = require "lib.sti"
 
 -- imports
 require "core.util.constants"

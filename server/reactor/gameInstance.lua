@@ -22,7 +22,7 @@ function GameInstance:init(name, port)
     
     self.messages = require "network.messages"
     
-    trigger.init()
+    trigger:init()
     
     -- dt counter
     self.dt = -1

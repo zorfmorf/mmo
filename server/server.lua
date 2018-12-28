@@ -8,7 +8,7 @@ socket = require "socket"
 local enet = require "enet"
 
 -- own log handler
-log = require "util.log"
+log = require "core.util.log"
 
 -- configuration
 -- TODO write config handler that generates default config if not existent

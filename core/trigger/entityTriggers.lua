@@ -1,6 +1,5 @@
 
-local et
-
+local et = {}
 
 -- placeholder/example implementation
 function et:ability(id, name)
