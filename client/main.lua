@@ -12,15 +12,10 @@ require "core.util.util"
 --camera = require "client.camera"
 --objectHandler = require "core.game.objectHandler"
 --animationHandler = require "core.game.animationHandler"
-local clientConnector = require "network.clientConnector"
+local network = require "lib.hold.network"
 local trigger = require "core.trigger.trigger"
 --serializer = require "core.serialization.serializer"
 --inputHandler = require "client.inputHandler"
-
--- vars
-local host = nil
-local server = nil
-local map = nil
 
 
 function love.load()
@@ -31,7 +26,8 @@ function love.load()
     --map = sti("core/map/overworld.lua")
     --objectHandler:init(map, animationHandler)
     --animationHandler:init()
-    clientConnector:init()
+    network:init("localhost", 25896, nil)
+    network:connect()
     trigger:init()
     --serializer:init(objectHandler)
 end
@@ -42,7 +38,7 @@ function love.update(dt)
     
     --map:update(dt)
     --objectHandler:update(dt)
-    clientConnector:read_inputs(dt)
+    network:read_inputs(dt)
 end
 
 
@@ -65,6 +61,6 @@ end
 
 
 function love.quit()
-    clientConnector:disconnect()
+    network:disconnect()
     return false
 end

@@ -1,8 +1,6 @@
 -- A (re)actor for a single gameinstance
 -- Handles a subset of the whole mmo world
 
-SERVER = true -- TODO remove this
-
 GameInstance = Class{}
 
 -- simulate love functionality so STI will work
@@ -20,8 +18,6 @@ function GameInstance:init(name, port)
     self.name = name
     self.port = port
     
-    self.messages = require "network.messages"
-    
     trigger:init()
     
     -- dt counter
@@ -32,7 +28,7 @@ end
 -- 
 function GameInstance:process_inputs(inputs)
     for i,event in ipairs(inputs) do
-    	self.messages:handleEvent(event)
+	-- Actually do something with received messages
     end
 end
 
@@ -46,10 +42,11 @@ end
 -- Send regular, delta-ed client updates
 function GameInstance:post_updates_to_clients(dt)
     -- first create update messages for all client states
-    
+    -- TODO network:queueMessage("test")
+
     -- then send all queued, outgoing messages
-    network:sendAll()
-    network:flush()
+    network:sendQueue()
+    -- network:flush()
 end
 
 

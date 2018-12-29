@@ -1,11 +1,9 @@
 -- libs
 Class = require "lib.hump.class" 
 
--- lua sockets mainly for millisecond precision and sleep methods
+-- lua sockets for millisecond precision and sleep methods
+-- we don't use the actual networking capabilities
 socket = require "socket"
-
--- enet TODO fix path? for linux?
-local enet = require "enet"
 
 -- own log handler
 log = require "core.util.log"
@@ -14,11 +12,11 @@ log = require "core.util.log"
 -- TODO write config handler that generates default config if not existent
 require "config"
 
--- enet wrapper for network handling
-network = require "network.network"
+-- custom hold(TM) networking library
+network = require "lib.hold.network"
 
 -- event handling
-events = require "network.events"
+events = require "event.events"
 
 -- (re)actors
 require "reactor.gameInstance"
@@ -26,8 +24,9 @@ require "reactor.gameInstance"
 -- create and run the individual (re)actors
 local r = GameInstance(DEFAULT_SERVER_NAME, DEFAULT_GAME_PORT)
 
--- Initialize stuff
-network:init("localhost", DEFAULT_GAME_PORT)
+-- Initialize stuff. TODO provide serializer
+network:init("localhost", DEFAULT_GAME_PORT, nil)
+network:create()
 events:init()
 
 -- create an initial timer event to kick off everything
@@ -40,3 +39,4 @@ while(true) do
     ev.inputs = network:read_inputs()
     r:react(ev)
 end
+
