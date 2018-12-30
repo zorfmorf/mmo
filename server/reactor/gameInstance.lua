@@ -26,7 +26,7 @@ end
 
 
 -- 
-function GameInstance:process_inputs(inputs)
+local function GameInstance:process_inputs(inputs)
     for i,event in ipairs(inputs) do
 	-- Actually do something with received messages
     end
@@ -34,13 +34,13 @@ end
 
 
 -- Update the game world
-function GameInstance:update(dt)
+local function GameInstance:update(dt)
 
 end
 
 
 -- Send regular, delta-ed client updates
-function GameInstance:post_updates_to_clients(dt)
+local function GameInstance:post_updates_to_clients(dt)
     -- first create update messages for all client states
     -- TODO network:queueMessage("test")
 
@@ -51,7 +51,7 @@ end
 
 
 -- Create a new event for the next run
-function GameInstance:post_timer_event(event)
+local function GameInstance:post_timer_event(event)
     events:create_timer_event(event.time + NETWORK_TICK_RATE)
 end
 

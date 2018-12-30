@@ -19,7 +19,7 @@ LOG_LEVEL = LOG_DEBUG
 
 
 -- Actually note down message
-function log:log(level, ...)
+local function log:log(level, ...)
     -- TODO keep in memory and dump periodically / on demand
     -- TODO enable print suppression?
     print(LOG_STR[level], ...)
@@ -58,3 +58,4 @@ function log:err(...)
 end
 
 return log
+
